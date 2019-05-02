@@ -9,14 +9,25 @@
     group: "{{confluent.control.center.group}}"
 - name: control center create config
   template:
-    src: control-center.properties.j2
+    src: control-center_tls.properties.j2
     dest: "{{confluent.control.center.config_file}}"
     mode: 0640
     owner: "{{confluent.control.center.user}}"
     group: "{{confluent.control.center.group}}"
-  when: security_mode == "plaintext"
+  when: security_mode == "ssl"
   notify:
     - restart control center
+- name: control center tls config
+  template:
+    src: control-center_tls.properties.j2
+    dest: "{{confluent.control.center.config_file}}"
+    mode: 0640
+    owner: "{{confluent.control.center.user}}"
+    group: "{{confluent.control.center.group}}"
+  when: security_mode == "tls"
+  notify:
+    - restart control center
+
 - name: control center create config
   template:
     src: control-center_ssl.properties.j2

@@ -3,7 +3,7 @@ zookeeper:
     clientPort: 2181
 broker:
   config:
-    port: 9092
+    port: 9093
 confluent:
   package_name: confluent-platform-2.11
   support:

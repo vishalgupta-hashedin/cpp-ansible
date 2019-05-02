@@ -1,0 +1,13 @@
+# Maintained by Ansible
+kafkastore.bootstrap.servers={% for host in groups['broker'] %}{% if loop.index > 1%},{% endif %}SSL://{{ host }}:{{broker.config.port}}{% endfor %}
+
+{% include './includes/base_schema-registry.properties.j2' %}
+
+#TLS additions
+kafkastore.ssl.truststore.location=/var/private/ssl/kafka-client-truststore.jks
+kafkastore.ssl.truststore.password=password
+kafkastore.ssl.keystore.location=/var/private/ssl/kafka-server-keystore.jks
+kafkastore.ssl.keystore.password=password
+kafkastore.ssl.key.password=password
+kafkastore.security.protocol=SSL
+~                               

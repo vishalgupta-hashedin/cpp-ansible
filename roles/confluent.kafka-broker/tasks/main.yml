@@ -25,9 +25,19 @@
   when: security_mode == "plaintext"
   notify:
     - restart kafka
+- name: broker tls config #broker tls configuration additions 
+  template:
+    src: server_tls.properties.j2
+    dest: "{{kafka.broker.config_file}}"
+    mode: 0640
+    owner: "{{kafka.broker.user}}"
+    group: "{{kafka.broker.group}}"
+  when: security_mode == "tls"
+  notify:
+    - restart kafka
 - name: broker ssl config
   template:
-    src: server_ssl.properties.j2
+    src: server_tls.properties.j2
     dest: "{{kafka.broker.config_file}}"
     mode: 0640
     owner: "{{kafka.broker.user}}"

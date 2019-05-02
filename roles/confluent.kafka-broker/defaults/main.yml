@@ -10,7 +10,7 @@ kafka:
       - /var/lib/kafka/data
     systemd:
       enabled: yes
-      state: started
+      state: restarted
     environment:
       KAFKA_HEAP_OPTS: "-Xmx1g"
     config:

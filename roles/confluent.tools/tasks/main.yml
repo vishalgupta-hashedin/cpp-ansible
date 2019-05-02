@@ -15,9 +15,17 @@
     owner: "{{kafka.tools.user}}"
     group: "{{kafka.tools.group}}"
   when: security_mode == "plaintext"
+- name: tools tls config
+  template:
+    src: tools_tls.properties.j2
+    dest: "{{kafka.tools.config_file}}"
+    mode: 0640
+    owner: "{{kafka.tools.user}}"
+    group: "{{kafka.tools.group}}"
+  when: security_mode == "tls"
 - name: tools ssl config
   template:
-    src: tools_ssl.properties.j2
+    src: tools_tls.properties.j2
     dest: "{{kafka.tools.config_file}}"
     mode: 0640
     owner: "{{kafka.tools.user}}"

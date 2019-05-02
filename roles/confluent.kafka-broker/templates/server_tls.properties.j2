@@ -1,0 +1,25 @@
+# Maintained by Ansible
+listeners=SSL://:{{broker.config.port}}
+
+{% include './includes/base_server.properties.j2' %}
+
+
+# TLS Additions
+ssl.client.auth=required
+ssl.keystore.location=/var/private/ssl/kafka-server-keystore.jks
+ssl.keystore.password=password
+ssl.key.password=password
+ssl.truststore.location=/var/private/ssl/kafka-server-truststore.jks
+security.inter.broker.protocol=SSL
+ssl.truststore.password=password
+
+confluent.metrics.reporter.security.protocol=SSL
+confluent.metrics.reporter.ssl.truststore.location=/var/private/ssl/kafka-client-truststore.jks
+confluent.metrics.reporter.ssl.truststore.password=password
+confluent.metrics.reporter.ssl.keystore.location=/var/private/ssl/kafka-client-keystore.jks
+confluent.metrics.reporter.ssl.keystore.password=password
+confluent.metrics.reporter.ssl.key.password=password
+
+
+# Confluent Support
+{% include './includes/confluent_support.j2' %}

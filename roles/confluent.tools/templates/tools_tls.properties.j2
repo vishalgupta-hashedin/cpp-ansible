@@ -1,0 +1,11 @@
+# Maintained by Ansible
+{% include './includes/base_tools.properties.j2' %}
+
+#TLS additions
+ssl.truststore.location=/var/private/ssl/kafka-client-truststore.jks
+ssl.truststore.password=password
+ssl.keystore.location=/var/private/ssl/kafka-client-keystore.jks
+ssl.keystore.password=password
+ssl.key.password=password
+security.protocol=SSL
+

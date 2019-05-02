@@ -1,0 +1,29 @@
+#!/bin/bash
+#Genarting RSA private key
+openssl genrsa -des3 -out hostname.key -passout pass:password 4096
+
+# Creating a .pem file with the RSA key
+openssl rsa -in hostname.key -out hostname-key.pem -passin pass:password -passout pass:password
+
+# Genetating a CSR 
+openssl req -new -key hostname-key.pem -out hostname-request.csr -subj '/CN=*.hashedin.com' -passin pass:confluent -passout pass:confluent
+
+# Generate a TLS certifictae using the CSR 
+openssl x509 -req -extensions v3_req -days 365 -in hostname-request.csr -signkey hostname.key -out hostname-cert.crt -extfile /etc/pki/tls/openssl.cnf -passin pass:password
+
+# Generating a p12 file using the certificate and the key file
+openssl pkcs12 -export -in hostname-cert.crt -inkey hostname.key -name *.hashedin.com -out cert.p12 -passin pass:password -passout pass:password
+
+# Generating the server keystore
+keytool -noprompt -importkeystore -deststorepass password -destkeystore kafka-server-keystore.jks -srckeystore cert.p12 -srcstoretype PKCS12 -storepass password -keypass password -srcstorepass password 
+
+#Generating the server truststore 
+keytool -noprompt -importkeystore -deststorepass password -destkeystore kafka-server-truststore.jks -srckeystore cert.p12 -srcstoretype PKCS12 -storepass password -keypass password -srcstorepass password
+
+keytool  -noprompt -import -trustcacerts -file hostname-cert.crt -alias certificate -keystore kafka-server-truststore.jks -storepass password -storepass password -keypass password -srcstorepass password
+
+# Generating the Client truststore 
+keytool  -noprompt -import -trustcacerts -file hostname-cert.crt -alias certificate -keystore kafka-client-truststore.jks -storepass password -storepass password -keypass password -srcstorepass password
+
+# Generating the Client keystore 
+keytool -noprompt -importkeystore -deststorepass password -destkeystore kafka-client-keystore.jks -srckeystore cert.p12 -srcstoretype PKCS12 -storepass password -keypass password -srcstorepass password

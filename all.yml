@@ -1,13 +1,11 @@
+- hosts: localhost
+  tasks:
+  - import_role:
+      name: confluent.certs
 - hosts: preflight
   tasks:
   - import_role:
       name: confluent.preflight
-    tags:
-      - pre-install
-- hosts: ssl_CA
-  tasks:
-  - import_role:
-      name: confluent.ssl_CA
     tags:
       - pre-install
 - hosts: zookeeper

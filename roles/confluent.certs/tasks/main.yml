@@ -1,0 +1,23 @@
+---
+# tasks file for confluent.certs
+- name: creating certs directory
+  file:
+    path: sslcerts
+    state: directory
+    mode: 0755
+- name : dirctory 
+  command: pwd 
+  register: current_directory
+- name : configuring ssl
+  template:
+    src: ssl.j2
+    dest: /etc/pki/tls/openssl.cnf
+- name: creating certificate generating script
+  template:
+    src: certs.j2
+    dest: sslcerts/certs.sh
+    mode: 0774
+- name: creating certs
+  script:  sslcerts/certs.sh
+  args:
+    chdir: "{{ current_directory.stdout }}/sslcerts/"

@@ -17,9 +17,20 @@
   when: security_mode == "plaintext"
   notify:
     - restart ksql
+- name: ksql create tls config
+  template:
+    src: ksql_tls.properties.j2
+    dest: "{{ksql.config_file}}"
+    mode: 0640
+    owner: "{{ksql.user}}"
+    group: "{{ksql.group}}"
+  when: security_mode == "tls"
+  notify:
+    - restart ksql
+
 - name: ksql create config
   template:
-    src: ksql_ssl.properties.j2
+    src: ksql_tls.properties.j2
     dest: "{{ksql.config_file}}"
     mode: 0640
     owner: "{{ksql.user}}"
